@@ -22,9 +22,8 @@ export async function POST(req: Request) {
   // const { stream, handlers } = LangChainStream();
 
   const llm = new ChatOpenAI({
-    streaming: true,
+    // streaming: true,
   });
-  console.log(messages);
 
   const docs = [introduction];
   const docOutput = await splitDocs(docs);
@@ -76,7 +75,14 @@ If you don't know the answer, just say that you don't know, don't try to make up
   });
   console.log(res);
 
-  return new StreamingTextResponse(res);
+  const responseStream = new ReadableStream({
+    async start(controller) {
+      const bytes = new TextEncoder().encode(JSON.stringify(res));
+      controller.enqueue(bytes);
+      controller.close();
+    },
+  });
+  return new StreamingTextResponse(responseStream);
 }
 
 // Cheerio cannot execute JavaScript code on the page, so we cannot use
