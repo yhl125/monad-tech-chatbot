@@ -36,6 +36,9 @@ import { monadDb } from "@/app/data/docs/technical-discussion/execution/monaddb"
 import { transactionLifecycle } from "@/app/data/docs/technical-discussion/transaction-lifecycle-in-monad";
 import { otherDetails } from "@/app/data/docs/technical-discussion/other-details";
 
+// https://github.com/langchain-ai/langchainjs/issues/3521
+// export const runtime = "edge";
+
 export async function POST(req: Request) {
   const docs = [
     introduction,

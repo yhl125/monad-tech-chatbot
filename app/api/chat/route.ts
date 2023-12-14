@@ -11,6 +11,9 @@ import {
 import { RunnableSequence } from "langchain/schema/runnable";
 import { Chroma } from "langchain/vectorstores/chroma";
 
+// https://github.com/langchain-ai/langchainjs/issues/3521
+// export const runtime = "edge";
+
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
