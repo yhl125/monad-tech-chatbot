@@ -1,0 +1,7 @@
+services:
+  app:
+    container_name: monad-tech-chatbot
+    image: monad-tech-chatbot
+    build: .
+    ports:
+      - "3000:3000"
