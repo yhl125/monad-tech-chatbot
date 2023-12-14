@@ -77,16 +77,10 @@ export async function POST(req: Request) {
   const docOutput = await splitDocs(docs);
 
   // Create vector store and index the docs
-  await Chroma.fromDocuments(
-    docOutput,
-    new OpenAIEmbeddings({
-      openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-    }),
-    {
-      collectionName: "monad",
-      url: process.env.NEXT_PUBLIC_CHROMA_URL,
-    }
-  );
+  await Chroma.fromDocuments(docOutput, new OpenAIEmbeddings(), {
+    collectionName: "monad",
+    url: process.env.CHROMA_URL,
+  });
   return new Response("success");
 }
 
