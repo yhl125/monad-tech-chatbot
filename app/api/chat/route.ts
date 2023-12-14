@@ -22,13 +22,16 @@ export async function POST(req: Request) {
   const llm = new ChatOpenAI({
     // streaming: true,
     modelName: "gpt-3.5-turbo",
+    openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
   });
 
   const vectorStore = await Chroma.fromExistingCollection(
-    new OpenAIEmbeddings(),
+    new OpenAIEmbeddings({
+      openAIApiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+    }),
     {
       collectionName: "monad",
-      url: process.env.CHROMA_URL,
+      url: process.env.NEXT_PUBLIC_CHROMA_URL,
     }
   );
   const retriever = vectorStore.asRetriever();
