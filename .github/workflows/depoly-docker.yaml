@@ -1,0 +1,32 @@
+name: Advanced deploy
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  EC2-Deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: "EC2"
+      url: ${{ steps.deploy.outputs.vm_url }}
+    steps:
+    - id: deploy
+      name: Deploy
+      uses: bitovi/github-actions-deploy-docker-to-ec2@v1.0.0
+      with:
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_default_region: ap-northeast-2
+
+        aws_r53_enable: true
+        aws_r53_domain_name: yhl125.com
+        aws_r53_sub_domain_name: monad-chatbot
+
+        env_ghs: ${{ secrets.DOT_ENV }}
+        aws_elb_app_port: 3000
+        aws_elb_listen_port: 443,3000
+        aws_elb_healthcheck: "HTTP:3000"
+        
