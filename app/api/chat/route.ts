@@ -1,7 +1,5 @@
 import { StreamingTextResponse } from "ai";
 import { ChatOpenAI } from "langchain/chat_models/openai";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { Document } from "langchain/document";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { StringOutputParser } from "langchain/schema/output_parser";
 import { formatDocumentsAsString } from "langchain/util/document";
@@ -12,8 +10,6 @@ import {
 } from "langchain/prompts";
 import { RunnableSequence } from "langchain/schema/runnable";
 import { Chroma } from "langchain/vectorstores/chroma";
-
-export const runtime = "edge";
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
