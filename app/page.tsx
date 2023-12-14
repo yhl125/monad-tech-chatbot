@@ -25,9 +25,11 @@ export default function Chat() {
         <div className="ai-message">{json.result}</div>
         <HoverCard>
           <HoverCardTrigger>View source</HoverCardTrigger>
-          <HoverCardContent>
+          <HoverCardContent className="w-auto">
             {Array.from(sources).map((source) => (
-              <a href={source}>{source}</a>
+              <div>
+                <a href={source}>{source}</a>
+              </div>
             ))}
           </HoverCardContent>
         </HoverCard>
