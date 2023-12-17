@@ -3,6 +3,7 @@ import { Document } from "langchain/document";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { Chroma } from "langchain/vectorstores/chroma";
 
+// docs
 import { introduction } from "@/app/data/docs/introduction";
 import { briefings } from "@/app/data/docs/briefings";
 import { monadForDevelopers } from "@/app/data/docs/briefings/monad-for-developers";
@@ -35,6 +36,18 @@ import { parallelExecution } from "@/app/data/docs/technical-discussion/executio
 import { monadDb } from "@/app/data/docs/technical-discussion/execution/monaddb";
 import { transactionLifecycle } from "@/app/data/docs/technical-discussion/transaction-lifecycle-in-monad";
 import { otherDetails } from "@/app/data/docs/technical-discussion/other-details";
+// substack
+import { monadMonthly } from "@/app/data/substack/monad-monthly";
+import { mitigatingMev } from "@/app/data/substack/mitigating-mev";
+import { blockchainTheLargestExperiment } from "@/app/data/substack/blockchain-the-largest-experiment";
+import { highFidelityOraclesComingToDefi } from "@/app/data/substack/high-fidelity-oracles-coming-to-defi";
+import { onChainLimitOrderBooks } from "@/app/data/substack/on-chain-limit-order-books";
+import { monadVsRollups } from "@/app/data/substack/monad-vs-rollups";
+import { securityBenefitsOfMonad } from "@/app/data/substack/the-security-benefits-of-monad";
+import { monadRaises19m } from "@/app/data/substack/monad-raises-19m";
+import { parallelExecutionMonad } from "@/app/data/substack/parallel-execution-monad";
+import { whyCryptoWillPrevail } from "@/app/data/substack/why-crypto-will-prevail";
+import { monadLabsIsHiring } from "@/app/data/substack/monad-labs-is-hiring";
 
 // https://github.com/langchain-ai/langchainjs/issues/3521
 // export const runtime = "edge";
@@ -74,7 +87,22 @@ export async function POST(req: Request) {
     huffResources,
     officialLinks,
   ];
-  const docOutput = await splitDocs(docs);
+
+  const substack = [
+    monadMonthly,
+    mitigatingMev,
+    blockchainTheLargestExperiment,
+    highFidelityOraclesComingToDefi,
+    onChainLimitOrderBooks,
+    monadVsRollups,
+    securityBenefitsOfMonad,
+    monadRaises19m,
+    parallelExecutionMonad,
+    whyCryptoWillPrevail,
+    monadLabsIsHiring,
+  ];
+
+  const docOutput = await splitDocs(docs.concat(substack));
 
   // Create vector store and index the docs
   await Chroma.fromDocuments(docOutput, new OpenAIEmbeddings(), {
