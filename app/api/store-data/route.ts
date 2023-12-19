@@ -48,6 +48,10 @@ import { monadRaises19m } from "@/app/data/substack/monad-raises-19m";
 import { parallelExecutionMonad } from "@/app/data/substack/parallel-execution-monad";
 import { whyCryptoWillPrevail } from "@/app/data/substack/why-crypto-will-prevail";
 import { monadLabsIsHiring } from "@/app/data/substack/monad-labs-is-hiring";
+// discord ama
+import { november28 } from "@/app/data/discord/ama/november28";
+import { december8 } from "@/app/data/discord/ama/december8";
+import { april11 } from "@/app/data/discord/ama/april11";
 
 // https://github.com/langchain-ai/langchainjs/issues/3521
 // export const runtime = "edge";
@@ -102,7 +106,9 @@ export async function POST(req: Request) {
     monadLabsIsHiring,
   ];
 
-  const docOutput = await splitDocs(docs.concat(substack));
+  const discordAma = november28.concat(december8).concat(april11);
+
+  const docOutput = await splitDocs(docs.concat(substack).concat(discordAma));
 
   // Create vector store and index the docs
   await Chroma.fromDocuments(docOutput, new OpenAIEmbeddings(), {
