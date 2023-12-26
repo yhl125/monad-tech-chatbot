@@ -49,7 +49,7 @@ If you don't know the answer, just say that you don't know, don't try to make up
     {
       // Extract the "question" field from the input object and pass it to the retriever as a string
       sourceDocuments: RunnableSequence.from([
-        (input) => "search in context." + input.question,
+        (input) => input.question,
         retriever,
       ]),
       question: (input) => input.question,
