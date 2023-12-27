@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       url: process.env.CHROMA_URL,
     }
   );
-  const retriever = vectorStore.asRetriever();
+  const retriever = vectorStore.asRetriever(6);
 
   // Create a system & human prompt for the chat model
   const SYSTEM_TEMPLATE = `Use the following pieces of context to answer the users question.
