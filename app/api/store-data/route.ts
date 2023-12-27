@@ -112,7 +112,7 @@ export async function POST(req: Request) {
 
   // Create vector store and index the docs
   await Chroma.fromDocuments(docOutput, new OpenAIEmbeddings(), {
-    collectionName: "monad",
+    collectionName: "monad-chatbot",
     url: process.env.CHROMA_URL,
   });
   return new Response("success");

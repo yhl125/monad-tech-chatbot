@@ -27,7 +27,7 @@ export async function POST(req: Request) {
   const vectorStore = await Chroma.fromExistingCollection(
     new OpenAIEmbeddings(),
     {
-      collectionName: "monad",
+      collectionName: "monad-chatbot",
       url: process.env.CHROMA_URL,
     }
   );
