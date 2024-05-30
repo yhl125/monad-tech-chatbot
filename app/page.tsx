@@ -55,7 +55,7 @@ export default function Chat() {
       <div className="flex justify-center mt-5">
         <Select onValueChange={value=> setModel(value)}>
           <SelectTrigger className="w-1/2">
-            <SelectValue placeholder="Select a model" />
+            <SelectValue placeholder="Select a model (default: heurist-mistralai/mixtral-8x7b)" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
