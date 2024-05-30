@@ -1,7 +1,7 @@
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { Chroma } from "langchain/vectorstores/chroma";
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { VercelPostgres } from "@langchain/community/vectorstores/vercel_postgres";
 
 // docs
 import { introduction } from "@/app/data/docs/introduction";
@@ -37,6 +37,10 @@ import { monadDb } from "@/app/data/docs/technical-discussion/execution/monaddb"
 import { transactionLifecycle } from "@/app/data/docs/technical-discussion/transaction-lifecycle-in-monad";
 import { otherDetails } from "@/app/data/docs/technical-discussion/other-details";
 // substack
+import { monadMonthly960 } from "@/app/data/substack/monad-monthly-960";
+import { monadLabsRaises225m } from "@/app/data/substack/monad-labs-raises-225m-in-funding";
+import { monadMonthly30a } from "@/app/data/substack/monad-monthly-30a";
+import { monadMonthly87e } from "@/app/data/substack/monad-monthly-8e7";
 import { monadMonthly } from "@/app/data/substack/monad-monthly";
 import { mitigatingMev } from "@/app/data/substack/mitigating-mev";
 import { blockchainTheLargestExperiment } from "@/app/data/substack/blockchain-the-largest-experiment";
@@ -52,7 +56,6 @@ import { monadLabsIsHiring } from "@/app/data/substack/monad-labs-is-hiring";
 import { november28 } from "@/app/data/discord/ama/november28";
 import { december8 } from "@/app/data/discord/ama/december8";
 import { april11 } from "@/app/data/discord/ama/april11";
-
 // https://github.com/langchain-ai/langchainjs/issues/3521
 // export const runtime = "edge";
 
@@ -93,6 +96,10 @@ export async function POST(req: Request) {
   ];
 
   const substack = [
+    monadMonthly960,
+    monadLabsRaises225m,
+    monadMonthly30a,
+    monadMonthly87e,
     monadMonthly,
     mitigatingMev,
     blockchainTheLargestExperiment,
@@ -110,22 +117,19 @@ export async function POST(req: Request) {
 
   const docOutput = await splitDocs(docs.concat(substack).concat(discordAma));
 
-  // Create vector store and index the docs
-  await Chroma.fromDocuments(docOutput, new OpenAIEmbeddings(), {
-    collectionName: "monad-chatbot",
-    url: process.env.CHROMA_URL,
+  const embeddings = new OpenAIEmbeddings({
+    apiKey: process.env.OPENAI_API_KEY,
+    model: "text-embedding-3-small",
   });
-  return new Response("success");
+
+  // Create vector store and index the docs
+  const vectorstore = await VercelPostgres.initialize(embeddings, {
+    tableName: "monad",
+  });
+  await vectorstore.addDocuments(docOutput);
+
+  return new Response("Success");
 }
-
-// Cheerio cannot execute JavaScript code on the page, so we cannot use
-// async function readDocs() {
-//   const loader = new CheerioWebBaseLoader("https://docs.monad.xyz/");
-
-//   const docs = await loader.load();
-
-//   return docs;
-// }
 
 async function splitDocs(documents: Document<Record<string, any>>[]) {
   const splitter = new RecursiveCharacterTextSplitter({

@@ -22,7 +22,7 @@ export const mitigatingMev: Document<Record<string, any>> = {
   
   # Mitigating MEV: a core-protocol approach
   
-  Much discussion in the blockchain and app design space has focused on “minimizing MEV” - i.e. minimizing the value that is extractable from users through transaction reordering. While the mechanics of reordering, and new designs that are potentially more resilient to reordering, is an interesting concern, we think that an equally-important question to address is _why_ users submit transactions that give up so much value, and what can be done to allow them to reduce the amount of value they give up.
+  Much discussion in the blockchain and app design space has focused on “minimizing MEV” - i.e. minimizing the value that is extractable from users through transaction reordering. While the mechanics of reordering, and new designs that are potentially more resilient to reordering, is an interesting concern, we think that an equally-important question to address is _why_ users submit transactions that give up so much value, and what can be done to allow them to reduce the amount of value they give up.
   
   [
   
@@ -54,15 +54,15 @@ export const mitigatingMev: Document<Record<string, any>> = {
   
   ### Minimizing liquidation penalties with more granular oracle updates
   
-  Lending protocols allow a borrower Bob to deposit an asset and borrow a different asset against their deposit. The protocol allows a lower value to be borrowed than was deposited; the ratio of these two amounts is the “Loan-to-Value (LTV) ratio”. Both the collateral and the debt are priced using an [oracle](https://monadlabs.substack.com/p/high-fidelity-oracles-coming-to-defi) price.
+  Lending protocols allow a borrower Bob to deposit an asset and borrow a different asset against their deposit. The protocol allows a lower value to be borrowed than was deposited; the ratio of these two amounts is the “Loan-to-Value (LTV) ratio”. Both the collateral and the debt are priced using an [oracle](https://monadlabs.substack.com/p/high-fidelity-oracles-coming-to-defi) price.
   
   If Bob’s collateral loses value (or the value of Bob’s debt increases), the LTV ratio increases. If the value gets too close to 1, the protocol is in danger of having bad debt so it reduces risk by allowing another user, Larry the “liquidator”, to turn in the borrowed asset on behalf of Bob and receive some of Bob’s collateral. In order to incentivize Larry to do this, the protocol gives Larry a bit more value back (in units of collateral) than he puts in (in units of debt). The excess value is referred to as the “**liquidation penalty**”.
   
-  Top lenders on Ethereum such as MakerDAO follow an auction-based liquidation process, whilst Aave, Compound, and dYdX operate under a fixed spread liquidation model. The liquidation penalty on Aave is [5%](https://docs.aave.com/faq/liquidations). The liquidation penalty on Compound ranges from [3% to 12%](https://app.compound.finance/markets/usdc-mainnet).
+  Top lenders on Ethereum such as MakerDAO follow an auction-based liquidation process, whilst Aave, Compound, and dYdX operate under a fixed spread liquidation model. The liquidation penalty on Aave is [5%](https://docs.aave.com/faq/liquidations). The liquidation penalty on Compound ranges from [3% to 12%](https://app.compound.finance/markets/usdc-mainnet).
   
   Why is the liquidation penalty so large? It stems largely from imprecision in the oracle price.
   
-  Liquidators will only liquidate a position if it has positive expected value for the liquidator to take action. However, the terms offered to the liquidator are based on oracle pricing, which might be out of date since oracles on mainnet only update on fairly large price moves (see a further discussion of [this](https://monadlabs.substack.com/p/high-fidelity-oracles-coming-to-defi)). In order to be sure that liquidators are being offered terms that they are likely to take, the liquidation penalty needs to price in a fudge factor; a sizable liquidation penalty serves this purpose.
+  Liquidators will only liquidate a position if it has positive expected value for the liquidator to take action. However, the terms offered to the liquidator are based on oracle pricing, which might be out of date since oracles on mainnet only update on fairly large price moves (see a further discussion of [this](https://monadlabs.substack.com/p/high-fidelity-oracles-coming-to-defi)). In order to be sure that liquidators are being offered terms that they are likely to take, the liquidation penalty needs to price in a fudge factor; a sizable liquidation penalty serves this purpose.
   
   With more precise oracles, lending protocols could reduce the liquidation penalty. But more precise oracles require cheaper transaction fees.
   
